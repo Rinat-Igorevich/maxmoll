@@ -5,7 +5,7 @@ $orders = Orders::getOrders();
 ?>
 <h3>Заказы</h3>
 <hr>
-<div class="">
+<div class="container">
     <form action="create">
         <button class="btn btn-primary">Создать заказ</button>
     </form>
