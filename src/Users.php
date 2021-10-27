@@ -9,7 +9,6 @@ class Users
         if ($id != null) {
             $query .= ' WHERE id =' . $id;
         }
-
         $pdo = getPDO();
 
         $statement = $pdo->prepare($query);

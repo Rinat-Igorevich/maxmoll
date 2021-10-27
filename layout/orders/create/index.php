@@ -25,9 +25,6 @@ $type = $order['type'] ?? false;
         <div class="container">
             <button class="btn btn-primary" type="submit" name="action" value="<?= isset($_GET['order']) ? 'changeOrder' : 'createOrder'?>">сохранить</button>
         </div>
-        <div>
-
-        </div>
         <div class="container" style="text-align: center">
             <input name="customer" value="<?= $order['customer'] ?? ''?>" required>ФИО
             <input name="phone" value="<?= $order['phone'] ?? ''?>" required>Телефон
@@ -99,7 +96,6 @@ $type = $order['type'] ?? false;
                 <td><input id="price1" disabled></td>
                 <td><input id="discount1" name="discount_1" value="0" onchange="products.changeCost(event)"></td>
                 <td><input class="sum" id="sum1" name="sum_1" readonly></td>
-
             </tr>
             <?php endif; ?>
             </tbody>
@@ -110,13 +106,6 @@ $type = $order['type'] ?? false;
                 <td ><input name="cost" id="cost" value="<?= $sum ?? ''?>" readonly></td>
             </tr>
             </tfoot>
-        </table>
-        <table class="table" >
-            <thead>
-            </thead>
-            <tbody >
-
-            </tbody>
         </table>
     </form>
 </div>

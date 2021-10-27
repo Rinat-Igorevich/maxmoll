@@ -1,7 +1,7 @@
 <?php
+
 require '../header.php';
 
-$orders = Orders::getOrders();
 $report = Orders::getReport();
 
 ?>
