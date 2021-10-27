@@ -1,18 +1,17 @@
 <?php
 require '../header.php';
+
 $orders = Orders::getOrders();
 $report = Orders::getReport();
+
 ?>
-
 <h3>Отчет</h3>
-
 <div class="">
-
     <table class="table">
         <thead>
             <tr style="text-align: center;">
                 <th>Дата</th>
-                <th>Колличество закрытых заказов</th>
+                <th>Количество закрытых заказов</th>
                 <th>Сумма</th>
             </tr>
         </thead>
@@ -25,7 +24,6 @@ $report = Orders::getReport();
             </tr>
         <?php endforeach; ?>
         </tbody>
-
     </table>
 </div>
 <?php

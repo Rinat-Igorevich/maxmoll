@@ -12,3 +12,28 @@ function getPDO()
         DB_CONNECTION_PASSWORD
     );
 }
+
+function getNewOrderItems()
+{
+    $orderItemsToCreate = [];
+    foreach ($_POST as $key=>$value) {
+
+        if (stristr($key, '_', true) == 'product') {
+            $id = explode('_', $key)[1];
+            $orderItemsToCreate[$id]['id'] = $value;
+        }
+        if (stristr($key, '_', true) == 'count') {
+            $id = explode('_', $key)[1];
+            $orderItemsToCreate[$id]['count'] = $value;
+        }
+        if (stristr($key, '_', true) == 'discount') {
+            $id = explode('_', $key)[1];
+            $orderItemsToCreate[$id]['discount'] = $value;
+        }
+        if (stristr($key, '_', true) == 'sum') {
+            $id = explode('_', $key)[1];
+            $orderItemsToCreate[$id]['sum'] = $value;
+        }
+    }
+    return $orderItemsToCreate;
+}

@@ -16,23 +16,28 @@ class Products
         return $products;
     }
 
-    public static function decreaseStock($id, $count)
+    public static function decreaseStock($orderItems)
     {
         $pdo = getPDO();
-        $statement = $pdo->prepare('UPDATE products SET stock = stock-? WHERE id = ?');
-        $statement->execute([$count, $id]);
-        $pdo = null;
 
-        return $statement->errorCode();
-    }
-    public static function increaseStock($id, $count)
-    {
-        $pdo = getPDO();
-        $statement = $pdo->prepare('UPDATE products SET stock = stock + ? WHERE id = ?');
-        $statement->execute([$count, $id]);
+        foreach ($orderItems as $key => $value) {
+            $statement = $pdo->prepare('UPDATE products SET stock = stock-? WHERE id = ?');
+            $statement->execute([intval($value['count']), $value['id']]);
+        }
         $pdo = null;
 
         return $statement->errorCode();
     }
 
+    public static function increaseStock($orderItems)
+    {
+        $pdo = getPDO();
+        foreach ($orderItems as $key => $value) {
+            $statement = $pdo->prepare('UPDATE products SET stock = stock + ? WHERE id = ?');
+            $statement->execute([$value['count'], $value['id']]);
+        }
+        $pdo = null;
+
+        return $statement->errorCode();
+    }
 }

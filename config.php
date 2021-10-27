@@ -7,5 +7,4 @@ const DB_CONNECTION_DB_NAME = 'f0593218_maxmoll';
 $menu = [
   'Заказы' => '/layout/orders/',
   'Отчет' => '/layout/report',
-
 ];

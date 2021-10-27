@@ -1,19 +1,62 @@
+
 let products = {
 
-    changeCost: function () {
-        if (Number($('#count').val()) < 0) {
+    /*функция срабатывает когда
+     пользователь вводит кол-во товара
+     */
+    changeCost: function (e) {
+        let id = e.target.parentElement.parentElement.id
 
-            $('#count').val(0)
-        } else if (Number($('#count').val()) > $('#onStock').val()) {
+        if (Number($('#count'+id).val()) < 0) {
+            $('#count'+id).val(0)
+        } else if (Number($('#count'+id).val()) > $('#onStock'+id).val()) {
             alert('Вы пытаетесь заказать больше чем есть на складе')
-            $('#count').val($('#onStock').val())
-        } else if ($('#discount').val() > Number($('#count').val()) * Number($('#price').val()) ) {
+            $('#count'+id).val($('#onStock'+id).val())
+        } else if ($('#discount'+id).val() > Number($('#sum'+id).val())) {
             alert('Скидка превышает стоимость заказа!')
-            $('#discount').val(0)
+            $('#discount'+id).val(0)
         }
         console.log($('#cost').val())
-        $('#sum').val((Number($('#count').val()) * Number($('#price').val())))
-        $('#cost').val(Number($('#sum').val()) - Number($('#discount').val()))
+        $('#sum'+id).val((Number($('#count'+id).val()) * Number($('#price'+id).val()))-Number($('#discount'+id).val()))
+        let sum=0
+        $('.sum').each(function(e,n) {
+            sum += Number(n.value)
+        })
+        console.log(sum)
+        $('#cost').val(Number(sum))
+        return false;
+
+    },
+    deleteRow: function () {
+        let countRows = $('#createOrder tbody tr').size()
+        console.log(countRows)
+        if (countRows > 1) {
+            $('#createOrder tbody>tr:last').remove()
+            countRows --
+        }
+    },
+
+    addRow: function (id) {
+        let newId = Number($('#addButton').val())+1
+        let prevId = newId-1
+        // $('#createOrder').append('<tr><th>'+ newId +'</th> <td><input></td> <td><input></td> </tr>')
+        $('#createOrder tbody>tr:last').clone(true).insertAfter('#createOrder tbody>tr:last');
+        $('#createOrder tbody>tr>th:last').html(newId)
+        $('#createOrder tbody>tr:last').attr('id', newId)
+        $('#createOrder tbody>tr>td>select:last').attr('id', 'product'+newId)
+        $('#createOrder tbody>tr>td>select:last').attr('name', 'product_'+newId)
+        $('#createOrder tbody>tr:last>td>input:first').attr('id', 'count'+newId)
+        $('#createOrder tbody>tr:last>td>input:first').attr('name', 'count_'+newId)
+        $('#createOrder tbody>tr:last>td:first').next().next().children().attr('id', 'onStock'+newId)
+        $('#createOrder tbody>tr:last>td:first').next().next().children().attr('name', 'onStock'+newId)
+        $('#createOrder tbody>tr:last>td:first').next().next().next().children().attr('id', 'price'+newId)
+        $('#createOrder tbody>tr:last>td:first').next().next().next().children().attr('name', 'price'+newId)
+        $('#createOrder tbody>tr:last>td:last').prev().children().attr('id', 'discount'+newId)
+        $('#createOrder tbody>tr:last>td:last').prev().children().attr('name', 'discount_'+newId)
+        $('#createOrder tbody>tr:last>td:last>input').attr('id', 'sum'+newId)
+        $('#createOrder tbody>tr:last>td:last>input').attr('name', 'sum_'+newId)
+        console.log($('#createOrder tbody>tr:last>td>next>input:first'))
+        $('#addButton').val(newId)
 
     },
 
@@ -25,6 +68,7 @@ let products = {
 
     setStockAndPrice: function (e) {
         let id = e.target.value
+        let row = e.target.parentElement.parentElement.id
         $('#count').val(0)
 
         let formData = new FormData();
@@ -32,7 +76,7 @@ let products = {
         formData.append('action', 'getProduct')
 
         $.ajax({
-            url: '/',
+            url: '/layout/orders/',
             method: 'post',
             data: formData,
             dataType: 'json',
@@ -41,8 +85,9 @@ let products = {
             contentType: false,
 
             success: function (respond) {
-                $('#onStock').val(respond.stock[0]['stock'])
-                $('#price').val(respond.stock[0]['price'])
+                console.log(respond)
+                $('#onStock'+row).val(respond.stock[0]['stock'])
+                $('#price'+row).val(respond.stock[0]['price'])
             }
         });
     }
@@ -92,7 +137,7 @@ let orders = {
         console.log(this.checkForm())
         if (this.checkForm()) {
             formData.append('action', $('#submit').val())
-            formData.append('orderID',  $('#orderID').val())
+            formData.append('orderID', $('#orderID').val())
             formData.append('customer', $('#customer').val())
             formData.append('phone', $('#phone').val())
             formData.append('product', $('#product').val())
@@ -132,11 +177,11 @@ let orders = {
         $('#submit').val('changeOrder')
     },
 
-    checkForm: function() {
+    checkForm: function () {
 
         return ($('#customer').val().replace(/ /g, "").length > 0) &&
-               ($('#phone').val().replace(/ /g, "").length > 0) &&
-               ($('#product').val() != null) &&
-               ($('#count').val() > 0 )
+            ($('#phone').val().replace(/ /g, "").length > 0) &&
+            ($('#product').val() != null) &&
+            ($('#count').val() > 0)
     }
 }
