@@ -1,5 +1,4 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/helpers.php';
 
 class Orders
 {
@@ -11,7 +10,7 @@ class Orders
      */
     public static function getOrders($id = null)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $query = 'SELECT * FROM orders';
 
         if ($id != null) {
@@ -35,7 +34,7 @@ class Orders
      */
     public static function createOrder($orderItemsToCreate)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $query = 'INSERT INTO orders(
                                customer, 
                                phone,  
@@ -70,7 +69,7 @@ class Orders
      */
     public static function createOrderItems($orderItemsToCreate, $order_id)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         Products::decreaseStock($orderItemsToCreate);
         $error = '';
         foreach ($orderItemsToCreate as $key => $value) {
@@ -110,7 +109,7 @@ class Orders
 
         $date = Helper::checkStatus($currentStatus, $newStatus, $orderItemsToChange);
 
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $error = '';
         $query = 'UPDATE orders SET 
                                customer = ?, 
@@ -141,7 +140,7 @@ class Orders
      */
     public static function getCurrentOrderStatus($id)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $statement = $pdo->prepare('SELECT status FROM orders WHERE id = ?');
         $statement->execute([$id]);
         $status = $statement->fetchColumn();
@@ -150,14 +149,14 @@ class Orders
         return $status;
     }
     /*
-     * ф-я получения товаров заказа (+остаток +цена
+     * ф-я получения товаров заказа (+остаток +цена по товарам)
      * принимает id заказа
-     * !id товара именуется как просто id
      * возвращает массив товаров
+     * !id товара именуется как просто id
      */
     public static function getOrderItems($id)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $statement = $pdo
             ->prepare('SELECT order_id, 
                                     product_id AS id, 
@@ -174,28 +173,39 @@ class Orders
         $pdo = null;
         return $orderItems;
     }
-
+    /*
+     * ф-я изменения товаров заказа
+     * принимает массив новых товаров и id заказа
+     * вызывает ф-ии удаления всех записей по id заказа
+     * и заново создает записи с новыми товарами
+     */
     public static function changeOrderItems($orderItemsToChange, $orderId)
     {
         self::deleteOrderItems($orderId);
         self::createOrderItems($orderItemsToChange, $orderId);
-
-        return '';
     }
-
+    /*
+     * ф-я удаления всех записей в таблице заказ-товары
+     * принимает id заказа.
+     * вызывает ф-ю, которая увеличивает остаток по товарам, которые были в заказе
+     */
     public static function deleteOrderItems($orderID)
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
         $orderItems = self::getOrderItems($orderID);
         Products::increaseStock($orderItems);
         $statement = $pdo->prepare('DELETE FROM order_items WHERE order_id=?');
         $statement->execute([$orderID]);
         $pdo = null;
     }
-
+    /*
+     * ф-я получения отчета
+     * возвращает массив, в котором выбраны заказы в статусе 'completed'
+     * сгруппированы по дате и просуммированы заказы в рамках одного дня.
+     */
     public static function getReport()
     {
-        $pdo = getPDO();
+        $pdo = Helper::getPDO();
 
         $statement = $pdo->prepare("SELECT COUNT(DISTINCT order_id) AS count, DATE(completed_at) as date, sum(cost) as sum FROM orders
                                                 LEFT JOIN order_items oi on orders.id = oi.order_id

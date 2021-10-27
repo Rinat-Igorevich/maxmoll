@@ -13,19 +13,19 @@ $orders = Orders::getOrders();
     <form action="change" method="get">
         <table class="table table-bordered table-striped table-sm ">
             <thead style="border: darkgray">
-            <tr style="text-align: center">
-                <th rowspan="2" scope="rowgroup">№</th>
-                <th scope="rowgroup">Покупатель</th>
-                <th scope="col">Дата создания</th>
-                <th rowspan="2" scope="col" style="text-align: center">Менеджер</th>
-                <th scope="col">Тип заказа</th>
-                <th rowspan="2" scope="col">Редактировать</th>
-            </tr>
-            <tr style="text-align: center">
-                <th scope="rowgroup">телефон</th>
-                <th scope="col">Дата закрытия</th>
-                <th scope="col">Статус</th>
-            </tr>
+                <tr style="text-align: center">
+                    <th rowspan="2" scope="rowgroup">№</th>
+                    <th scope="rowgroup">Покупатель</th>
+                    <th scope="col">Дата создания</th>
+                    <th rowspan="2" scope="col" style="text-align: center">Менеджер</th>
+                    <th scope="col">Тип заказа</th>
+                    <th rowspan="2" scope="col">Редактировать</th>
+                </tr>
+                <tr style="text-align: center">
+                    <th scope="rowgroup">телефон</th>
+                    <th scope="col">Дата закрытия</th>
+                    <th scope="col">Статус</th>
+                </tr>
             </thead>
             <tbody class="page-products__list">
             <?php foreach ($orders as $order): ?>

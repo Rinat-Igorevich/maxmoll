@@ -27,13 +27,13 @@ if (isset($_POST['action'])) {
             die(json_encode($result));
 
         case 'createOrder':
-            $orderItemsToCreate = getNewOrderItems();
+            $orderItemsToCreate = Helper::getNewOrderItems();
             $orders = Orders::createOrder($orderItemsToCreate);
             $result = ['orders' => $orders, 'text' => ' создан'];
             break;
 
         case 'changeOrder':
-            $orderItemsToCreate = getNewOrderItems();
+            $orderItemsToCreate = Helper::getNewOrderItems();
             $orders = Orders::changeOrder($orderItemsToCreate);
             $result = ['orders' => $orders, 'text' => ' изменен'];
             break;
@@ -71,7 +71,6 @@ if (isset($_POST['action'])) {
         <? foreach ($menu as $name => $ref): ?>
         <li class="nav-item"><a href="<?= $ref?>" class="nav-link"><?= $name?></a></li>
         <? endforeach;?>
-
     </ul>
 </header>
 <body>
