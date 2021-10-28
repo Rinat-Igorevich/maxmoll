@@ -15,7 +15,12 @@ class Helper
             DB_CONNECTION_PASSWORD
         );
     }
-
+    /*
+     * ф-я сравнивает текущий и новый статус заказа
+     * возвращает текущую дату, если новый статус completed и null, если нет
+     * после изменения заказа вызывается ф-я изменения записей в таблице заказ-товары
+     * которая принимает массив новых товаров и id измененного заказа
+     */
     public static function checkStatus($currentStatus, $newStatus, $orderItemsToChange)
     {
         $date = null;
@@ -30,7 +35,10 @@ class Helper
         }
         return $date;
     }
-
+    /*
+     * ф-я формирует новый список товаров заказа из массива POST
+     * возвращает массив с товарами
+     */
     public static function getNewOrderItems()
     {
         $orderItemsToCreate = [];

@@ -96,7 +96,6 @@ let products = {
             contentType: false,
 
             success: function (respond) {
-                console.log(respond)
                 $('#onStock'+row).val(respond.stock[0]['stock'])
                 $('#price'+row).val(respond.stock[0]['price'])
             }
