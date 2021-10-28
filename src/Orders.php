@@ -129,6 +129,8 @@ class Orders
                              $_POST['status'],
                              $_POST['orderID']
                              ]);
+        var_dump($statement->queryString);
+
         $error .= $statement->errorCode();
         $error .= self::changeOrderItems($orderItemsToChange, $_POST['orderID']);
         $pdo = null;

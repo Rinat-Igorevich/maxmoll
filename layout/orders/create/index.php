@@ -85,7 +85,7 @@ $type = $order['type'] ?? false;
                         <th><?= $key + 1 ?></th>
                         <td><select id="product<?= $key + 1 ?>" name="product_<?= $key + 1 ?>" required
                                     onchange="products.setStockAndPrice(event)">
-                                <option>Выберите товар</option>
+                                <option disabled>Выберите товар</option>
                                 <?php foreach ($products as $product): ?>
                                     <option value="<?= $product['id'] ?>" <?= $product['id'] == $orderItem['id'] ? 'selected' : '' ?>><?= $product['name'] ?></option>
                                 <?php endforeach; ?>
@@ -98,7 +98,7 @@ $type = $order['type'] ?? false;
                         <td><input id="onStock<?= $key + 1 ?>" value="<?= $orderItem['stock'] ?>" disabled></td>
                         <td><input id="price<?= $key + 1 ?>" value="<?= $orderItem['price'] ?>" disabled></td>
                         <td><input id="discount<?= $key + 1 ?>" name="discount_<?= $key + 1 ?>"
-                                   value="<?= $orderItem['discount'] ?>" onchange="products.setStockAndPrice()">
+                                   value="<?= $orderItem['discount'] ?>" min="0" oninput="products.changeCost(event)">
                         </td>
                         <td>
                             <input class="sum" id="sum<?= $key + 1 ?>" name="sum_<?= $key + 1 ?>"
@@ -121,7 +121,7 @@ $type = $order['type'] ?? false;
                                oninput="products.changeCost(event)"></td>
                     <td><input id="onStock1" disabled></td>
                     <td><input id="price1" disabled></td>
-                    <td><input id="discount1" name="discount_1" value="0" onchange="products.changeCost(event)">
+                    <td><input id="discount1" name="discount_1" value="0" oninput="products.changeCost(event)">
                     </td>
                     <td><input class="sum" id="sum1" name="sum_1" readonly></td>
                 </tr>

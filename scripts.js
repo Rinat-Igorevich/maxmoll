@@ -10,6 +10,10 @@ let products = {
     changeCost: function (e) {
         let id = e.target.parentElement.parentElement.id
 
+        if ( isNaN( e.target.value)) {
+            alert('пожалуйста, введите число')
+            e.target.value = 0
+        }
         if (Number($('#count'+id).val()) <= 0) {
             alert('нельзя заказать 0 товаров')
             $('#count'+id).val(1)
